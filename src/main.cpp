@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include "../include/utils.hpp"
+
 // using namespace glimac; // To uncomment later when glimac is included
 
 int window_width = 1200;
@@ -9,32 +11,9 @@ int window_height = 800;
 
 int main(int argc, char **argv)
 {
-    /* Inititalize glfw library */
-    if (!glfwInit())
-    {
-        return -1;
-    }
+    GLFWwindow *window;
 
-    /* Create a window and its OpenGL context */
-#ifdef __APPLE__
-    /* We need to explicitly ask for a 3.3 context on Mac */
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#endif
-    GLFWwindow *window = glfwCreateWindow(window_width, window_height, "TP5", nullptr, nullptr);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    /* Intialize glad (loads the OpenGL functions) */
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (!initializeGLFW(window, window_width, window_height))
     {
         return -1;
     }
