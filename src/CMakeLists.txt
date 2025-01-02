@@ -1,5 +1,5 @@
 file(GLOB HEADER_FILES *.hpp)
-file(GLOB EXT_SRC_FILES [^e][^x]*.cpp)
+file(GLOB EXT_SRC_FILES *.cpp)
 file(GLOB EXE_SRC_FILE main.cpp)
 list(REMOVE_ITEM EXT_SRC_FILES ${EXE_SRC_FILES})
 
