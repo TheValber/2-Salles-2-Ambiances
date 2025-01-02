@@ -5,11 +5,16 @@
 #include <iostream>
 
 #include "../include/utils.hpp"
+#include "../include/DrawableSquare.hpp"
 
 using namespace glimac;
 
 int window_width = 1200;
 int window_height = 800;
+
+const GLuint VERTEX_ATTR_POSITION = 0;
+const GLuint VERTEX_ATTR_NORMAL = 1;
+const GLuint VERTEX_ATTR_TEXCOORDS = 2;
 
 static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/)
 {
@@ -40,7 +45,7 @@ static void size_callback(GLFWwindow * /*window*/, int width, int height)
     window_height = height;
 }
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char **argv)
 {
     GLFWwindow *window;
 
@@ -52,6 +57,11 @@ int main(int argc, char **argv)
     FilePath applicationPath(argv[0]);
 
     glfwSetKeyCallback(window, &key_callback);
+    glfwSetWindowSizeCallback(window, &size_callback);
+
+    DrawableSquare square(2.f, 4.f, 0.f, 0.f);
+    square.initVBO();
+    square.initVAO(VERTEX_ATTR_POSITION, VERTEX_ATTR_NORMAL, VERTEX_ATTR_TEXCOORDS);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
