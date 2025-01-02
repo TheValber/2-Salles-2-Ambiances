@@ -6,6 +6,8 @@
 #include <glad/glad.h>
 #include <glimac/common.hpp>
 
+#include "UniformLocations.hpp"
+
 using namespace glimac;
 
 class Drawable
@@ -13,16 +15,16 @@ class Drawable
 public:
     virtual void initVBO() = 0;
 
-    virtual void initVAO(GLuint vertexAttrPosition, GLuint vertexAttrNormal, GLuint vertexAttrTexCoords) = 0;
+    virtual void initVAO() = 0;
 
-    virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, const glm::mat4 &NormalMatrix) const = 0;
+    virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const = 0;
 
-    void setLocations(GLint uMVPMatrixLocation, GLint uMVMatrixLocation, GLint uNormalMatrixLocation, GLint uTextureLocation)
+    void setLocations(UniformLocations uniformLocations)
     {
-        this->_uMVPMatrixLocation = uMVPMatrixLocation;
-        this->_uMVMatrixLocation = uMVMatrixLocation;
-        this->_uNormalMatrixLocation = uNormalMatrixLocation;
-        this->_uTextureLocation = uTextureLocation;
+        this->_uMVPMatrixLocation = uniformLocations.uMVPMatrixLocation;
+        this->_uMVMatrixLocation = uniformLocations.uMVMatrixLocation;
+        this->_uNormalMatrixLocation = uniformLocations.uNormalMatrixLocation;
+        this->_uTextureLocation = uniformLocations.uTextureLocation;
     }
 
     /**

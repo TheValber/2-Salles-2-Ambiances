@@ -13,7 +13,7 @@ public:
 
     void initVBO() override;
 
-    void initVAO(GLuint vertexAttrPosition, GLuint vertexAttrNormal, GLuint vertexAttrTexCoords) override;
+    void initVAO() override;
 
-    void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, const glm::mat4 &NormalMatrix) const override;
+    void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const override;
 };

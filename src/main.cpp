@@ -9,6 +9,9 @@
 
 #include "../include/utils.hpp"
 #include "../include/DrawableSquare.hpp"
+#include "../include/UniformLocations.hpp"
+#include "../include/Room1.hpp"
+#include "../include/Room2.hpp"
 
 using namespace glimac;
 
@@ -36,12 +39,10 @@ static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int acti
         if (isWireframe)
         {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            std::cout << "FILL" << std::endl;
         }
         else
         {
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            std::cout << "WIREFRAME" << std::endl;
         }
         isWireframe = !isWireframe;
     }
@@ -91,16 +92,22 @@ int main(int /*argc*/, char **argv)
         return -1;
     }
 
-    // TEMPORARY //////////////
     FilePath applicationPath(argv[0]);
-    Program program = loadProgram(applicationPath.dirPath() + "/shaders/test.vs.glsl",
-                                  applicationPath.dirPath() + "/shaders/test.fs.glsl");
-    program.use();
 
-    GLint uMVPMatrixLocation = glGetUniformLocation(program.getGLId(), "uMVPMatrix");
-    GLint uMVMatrixLocation = glGetUniformLocation(program.getGLId(), "uMVMatrix");
-    GLint uNormalMatrixLocation = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
-    GLint uTextureLocation = glGetUniformLocation(program.getGLId(), "uTexture");
+    // TEMPORARY 1 //////////////
+    Program program1 = loadProgram(applicationPath.dirPath() + "/shaders/test1.vs.glsl",
+                                   applicationPath.dirPath() + "/shaders/test1.fs.glsl");
+    program1.use();
+
+    UniformLocations testShaderLocations1(program1);
+    //////////////////////
+
+    // TEMPORARY 2 //////////////
+    Program program2 = loadProgram(applicationPath.dirPath() + "/shaders/test2.vs.glsl",
+                                   applicationPath.dirPath() + "/shaders/test2.fs.glsl");
+    program2.use();
+
+    UniformLocations testShaderLocations2(program2);
     //////////////////////
 
     glfwSetKeyCallback(window, &key_callback);
@@ -109,20 +116,8 @@ int main(int /*argc*/, char **argv)
     glfwSetScrollCallback(window, &scroll_callback);
     glfwSetCursorPosCallback(window, &cursor_position_callback);
 
-    DrawableSquare square(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(2.f, 4.f, 1.f));
-    square.initVBO();
-    square.initVAO(VERTEX_ATTR_POSITION, VERTEX_ATTR_NORMAL, VERTEX_ATTR_TEXCOORDS);
-    square.setLocations(uMVPMatrixLocation, uMVMatrixLocation, uNormalMatrixLocation, uTextureLocation);
-
-    DrawableSquare square2(glm::vec3(-11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 24.f, 1.f));
-    square2.initVBO();
-    square2.initVAO(VERTEX_ATTR_POSITION, VERTEX_ATTR_NORMAL, VERTEX_ATTR_TEXCOORDS);
-    square2.setLocations(uMVPMatrixLocation, uMVMatrixLocation, uNormalMatrixLocation, uTextureLocation);
-
-    DrawableSquare square3(glm::vec3(11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 24.f, 1.f));
-    square3.initVBO();
-    square3.initVAO(VERTEX_ATTR_POSITION, VERTEX_ATTR_NORMAL, VERTEX_ATTR_TEXCOORDS);
-    square3.setLocations(uMVPMatrixLocation, uMVMatrixLocation, uNormalMatrixLocation, uTextureLocation);
+    Room1 room1(testShaderLocations1);
+    Room2 room2(testShaderLocations2);
 
     glm::mat4 defaultProjMatrix = glm::perspective(glm::radians(70.f), (float)window_width / window_height, 0.1f, 100.f);
     glm::mat4 defaultMVMatrix = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0));
@@ -133,14 +128,15 @@ int main(int /*argc*/, char **argv)
         auto cameraViewMatrix = trackballCamera.getViewMatrix();
         glm::mat4 ProjMatrix = defaultProjMatrix;
         glm::mat4 MVMatrix = defaultMVMatrix * cameraViewMatrix;
-        glm::mat4 NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 
         glClearColor(.1f, 0.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        square.draw(ProjMatrix, MVMatrix, NormalMatrix);
-        square2.draw(ProjMatrix, MVMatrix, NormalMatrix);
-        square3.draw(ProjMatrix, MVMatrix, NormalMatrix);
+        program1.use();
+        room1.draw(ProjMatrix, MVMatrix);
+
+        program2.use();
+        room2.draw(ProjMatrix, MVMatrix);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
