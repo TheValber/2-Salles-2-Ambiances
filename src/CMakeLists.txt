@@ -30,4 +30,4 @@ endif()
 
 include("../CMakeUtils/files_and_folders.cmake")
 Cool__target_copy_folder(${OUTPUT} ../assets)
-Cool__target_copy_folder(${OUTPUT} shaders)
+Cool__target_copy_folder(${OUTPUT} ../shaders)
