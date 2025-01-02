@@ -1,11 +1,12 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <glimac/FilePath.hpp>
 #include <iostream>
 
 #include "../include/utils.hpp"
 
-// using namespace glimac; // To uncomment later when glimac is included
+using namespace glimac;
 
 int window_width = 1200;
 int window_height = 800;
@@ -33,6 +34,12 @@ static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int acti
     }
 }
 
+static void size_callback(GLFWwindow * /*window*/, int width, int height)
+{
+    window_width = width;
+    window_height = height;
+}
+
 int main(int argc, char **argv)
 {
     GLFWwindow *window;
@@ -41,6 +48,8 @@ int main(int argc, char **argv)
     {
         return -1;
     }
+
+    FilePath applicationPath(argv[0]);
 
     glfwSetKeyCallback(window, &key_callback);
 

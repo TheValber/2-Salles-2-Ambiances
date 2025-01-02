@@ -33,5 +33,8 @@ bool initializeGLFW(GLFWwindow *&window, int window_width, int window_height)
         return false;
     }
 
+    /* Enable depth test */
+    glEnable(GL_DEPTH_TEST);
+
     return true;
 }
