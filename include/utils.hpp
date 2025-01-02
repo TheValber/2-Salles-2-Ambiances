@@ -1,6 +1,5 @@
 // utils.hpp
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#pragma once
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -18,5 +17,3 @@
  * @return true if initialization and window creation were successful, false otherwise.
  */
 bool initializeGLFW(GLFWwindow *&window, int window_width, int window_height);
-
-#endif // UTILS_HPP
