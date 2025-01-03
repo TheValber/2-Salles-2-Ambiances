@@ -4,16 +4,16 @@
 
 Room2::Room2(UniformLocations uniformLocations)
 {
-    _floors.push_back(DrawableSquare(glm::vec3(0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 4.f, 1.f)));
-    _floors.push_back(DrawableSquare(glm::vec3(11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 24.f, 1.f)));
+    _floors.push_back(DrawableSquare(glm::vec3(0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
+    _floors.push_back(DrawableSquare(glm::vec3(11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 24.f)));
 
-    _walls.push_back(DrawableSquare(glm::vec3(0.5f, 2.f, 2.f), glm::vec3(90.f, 0.f, 0.f), glm::vec3(1.f, 4.f, 1.f)));
-    _walls.push_back(DrawableSquare(glm::vec3(1.f, 7.f, 2.f), glm::vec3(0.f, 90.f, 0.f), glm::vec3(4.f, 10.f, 1.f)));
-    _walls.push_back(DrawableSquare(glm::vec3(11.f, 12.f, 2.f), glm::vec3(90.f, 0.f, 0.f), glm::vec3(20.f, 4.f, 1.f)));
-    _walls.push_back(DrawableSquare(glm::vec3(21.f, 0.f, 2.f), glm::vec3(0.f, -90.f, 0.f), glm::vec3(4.f, 24.f, 1.f)));
-    _walls.push_back(DrawableSquare(glm::vec3(11.f, -12.f, 2.f), glm::vec3(-90.f, 0.f, 0.f), glm::vec3(20.f, 4.f, 1.f)));
-    _walls.push_back(DrawableSquare(glm::vec3(1.f, -7.f, 2.f), glm::vec3(0.f, 90.f, 0.f), glm::vec3(4.f, 10.f, 1.f)));
-    _walls.push_back(DrawableSquare(glm::vec3(0.5f, -2.f, 2.f), glm::vec3(-90.f, 0.f, 0.f), glm::vec3(1.f, 4.f, 1.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(0.5f, 2.f, 2.f), glm::vec3(-90.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(1.f, 2.f, 7.f), glm::vec3(0.f, 0.f, -90.f), glm::vec3(4.f, 1.f, 10.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(11.f, 2.f, 12.f), glm::vec3(-90.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 4.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(21.f, 2.f, 0.f), glm::vec3(0.f, 0.f, 90.f), glm::vec3(4.f, 1.f, 24.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(11.f, 2.f, -12.f), glm::vec3(90.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 4.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(1.f, 2.f, -7.f), glm::vec3(0.f, 0.f, -90.f), glm::vec3(4.f, 1.f, 10.f)));
+    _walls.push_back(DrawableSquare(glm::vec3(0.5f, 2.f, -2.f), glm::vec3(90.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
 
     for (auto &floor : _floors)
     {

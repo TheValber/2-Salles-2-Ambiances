@@ -36,5 +36,7 @@ bool initializeGLFW(GLFWwindow *&window, int window_width, int window_height)
     /* Enable depth test */
     glEnable(GL_DEPTH_TEST);
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     return true;
 }

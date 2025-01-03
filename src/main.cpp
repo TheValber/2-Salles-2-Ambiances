@@ -12,18 +12,15 @@
 #include "../include/UniformLocations.hpp"
 #include "../include/Room1.hpp"
 #include "../include/Room2.hpp"
+#include "../include/FPSCamera.hpp"
 
 using namespace glimac;
 
 int window_width = 1200;
 int window_height = 800;
 
-const GLuint VERTEX_ATTR_POSITION = 0;
-const GLuint VERTEX_ATTR_NORMAL = 1;
-const GLuint VERTEX_ATTR_TEXCOORDS = 2;
+auto fpsCamera = FPSCamera(0.07f, 0.2f);
 
-auto trackballCamera = TrackballCamera();
-bool leftClick = false;
 double lastX = 0;
 double lastY = 0;
 
@@ -48,33 +45,12 @@ static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int acti
     }
 }
 
-static void mouse_button_callback(GLFWwindow *window, int button, int action, int /*mods*/)
-{
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-    {
-        leftClick = true;
-        glfwGetCursorPos(window, &lastX, &lastY);
-    }
-    else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
-    {
-        leftClick = false;
-    }
-}
-
-static void scroll_callback(GLFWwindow * /*window*/, double /*xoffset*/, double yoffset)
-{
-    trackballCamera.moveFront(-yoffset * 0.1f);
-}
-
 static void cursor_position_callback(GLFWwindow * /*window*/, double xpos, double ypos)
 {
-    if (leftClick)
-    {
-        trackballCamera.rotateLeft((xpos - lastX));
-        trackballCamera.rotateUp((ypos - lastY));
-        lastX = xpos;
-        lastY = ypos;
-    }
+    fpsCamera.rotateLeft(xpos - lastX);
+    fpsCamera.rotateUp(-(ypos - lastY));
+    lastX = xpos;
+    lastY = ypos;
 }
 
 static void size_callback(GLFWwindow * /*window*/, int width, int height)
@@ -112,9 +88,10 @@ int main(int /*argc*/, char **argv)
 
     glfwSetKeyCallback(window, &key_callback);
     glfwSetWindowSizeCallback(window, &size_callback);
-    glfwSetMouseButtonCallback(window, &mouse_button_callback);
-    glfwSetScrollCallback(window, &scroll_callback);
     glfwSetCursorPosCallback(window, &cursor_position_callback);
+
+    lastX = window_width / 2;
+    lastY = window_height / 2;
 
     Room1 room1(testShaderLocations1);
     Room2 room2(testShaderLocations2);
@@ -125,11 +102,28 @@ int main(int /*argc*/, char **argv)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        auto cameraViewMatrix = trackballCamera.getViewMatrix();
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            fpsCamera.moveFront(1);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            fpsCamera.moveFront(-1);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            fpsCamera.moveRight(-1);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            fpsCamera.moveRight(1);
+        }
+
+        auto cameraViewMatrix = fpsCamera.getViewMatrix();
         glm::mat4 ProjMatrix = defaultProjMatrix;
         glm::mat4 MVMatrix = defaultMVMatrix * cameraViewMatrix;
 
-        glClearColor(.1f, 0.f, 0.f, 1.f);
+        glClearColor(0.f, 0.5f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         program1.use();

@@ -10,12 +10,12 @@ DrawableSquare::DrawableSquare(glm::vec3 position, glm::vec3 rotation, glm::vec3
     _rotation = rotation;
     _scale = scale;
 
-    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, -0.5f, 0), glm::vec3(0, 0, 1), glm::vec2(0, 0)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, -0.5f, 0), glm::vec3(0, 0, 1), glm::vec2(1, 0)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0.5f, 0), glm::vec3(0, 0, 1), glm::vec2(1, 1)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, -0.5f, 0), glm::vec3(0, 0, 1), glm::vec2(0, 0)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0.5f, 0), glm::vec3(0, 0, 1), glm::vec2(1, 1)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0.5f, 0), glm::vec3(0, 0, 1), glm::vec2(0, 1)});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, -0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 0)});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, -0.5f), glm::vec3(0, 1, 0), glm::vec2(1, 0)});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(1, 1)});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, -0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 0)});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(1, 1)});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 1)});
 
     m_nVertexCount = 6;
 }
