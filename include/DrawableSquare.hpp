@@ -16,4 +16,10 @@ public:
     void initVAO() override;
 
     void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const override;
+
+    bool isInside(glm::vec3 pos, float radius) const override;
+
+    void setMinPoint() override;
+
+    void setMaxPoint() override;
 };

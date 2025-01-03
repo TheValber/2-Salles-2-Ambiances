@@ -19,6 +19,12 @@ public:
 
     virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const = 0;
 
+    virtual bool isInside(glm::vec3 pos, float radius) const = 0;
+
+    virtual void setMinPoint() = 0;
+
+    virtual void setMaxPoint() = 0;
+
     void setLocations(UniformLocations uniformLocations)
     {
         this->_uMVPMatrixLocation = uniformLocations.uMVPMatrixLocation;
@@ -51,6 +57,9 @@ protected:
     glm::vec3 _position;
     glm::vec3 _rotation;
     glm::vec3 _scale;
+
+    glm::vec3 _minPoint;
+    glm::vec3 _maxPoint;
 
     std::vector<ShapeVertex> m_Vertices;
     GLsizei m_nVertexCount;

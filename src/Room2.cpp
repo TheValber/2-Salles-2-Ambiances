@@ -42,3 +42,16 @@ void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const
         wall.draw(ProjMatrix, MVMatrix);
     }
 }
+
+bool Room2::isInWall(glm::vec3 pos, float radius) const
+{
+    for (const auto &wall : _walls)
+    {
+        if (wall.isInside(pos, radius))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

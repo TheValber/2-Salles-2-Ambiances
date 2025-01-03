@@ -18,6 +18,9 @@ DrawableSquare::DrawableSquare(glm::vec3 position, glm::vec3 rotation, glm::vec3
     m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 1)});
 
     m_nVertexCount = 6;
+
+    setMinPoint();
+    setMaxPoint();
 }
 
 void DrawableSquare::initVBO()
@@ -56,4 +59,52 @@ void DrawableSquare::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix
     glUniformMatrix4fv(_uNormalMatrixLocation, 1, GL_FALSE, glm::value_ptr(NormalMat));
     glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
     glBindVertexArray(0);
+}
+
+void DrawableSquare::setMinPoint()
+{
+    glm::vec3 point(-0.5f, 0.0f, -0.5f);
+
+    point *= _scale;
+
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+
+    point += _position;
+
+    _minPoint = point;
+}
+
+void DrawableSquare::setMaxPoint()
+{
+    glm::vec3 point(0.5f, 0.0f, 0.5f);
+
+    point *= _scale;
+
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+
+    point += _position;
+
+    _maxPoint = point;
+}
+
+bool DrawableSquare::isInside(glm::vec3 pos, float radius) const
+{
+
+    if (pos.x + radius < _minPoint.x || pos.x - radius > _maxPoint.x)
+    {
+        return false;
+    }
+
+    if (pos.z + radius < _minPoint.z || pos.z - radius > _maxPoint.z)
+    {
+        return false;
+    }
+
+    return true;
 }

@@ -19,7 +19,7 @@ using namespace glimac;
 int window_width = 1200;
 int window_height = 800;
 
-auto fpsCamera = FPSCamera(0.07f, 0.2f);
+auto fpsCamera = FPSCamera(0.07f, 0.2f, 0.3f);
 
 double lastX = 0;
 double lastY = 0;
@@ -57,6 +57,26 @@ static void size_callback(GLFWwindow * /*window*/, int width, int height)
 {
     window_width = width;
     window_height = height;
+}
+
+static void moveCamera(GLFWwindow *window, const Room &room)
+{
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        fpsCamera.moveFront(1, room);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        fpsCamera.moveFront(-1, room);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        fpsCamera.moveRight(-1, room);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        fpsCamera.moveRight(1, room);
+    }
 }
 
 int main(int /*argc*/, char **argv)
@@ -102,21 +122,17 @@ int main(int /*argc*/, char **argv)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        if (fpsCamera.getPosition().x < 0)
         {
-            fpsCamera.moveFront(1);
+            // In the Room 1
+            moveCamera(window, room1);
+            program1.use();
         }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        else
         {
-            fpsCamera.moveFront(-1);
-        }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        {
-            fpsCamera.moveRight(-1);
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        {
-            fpsCamera.moveRight(1);
+            // In the Room 2
+            moveCamera(window, room2);
+            program2.use();
         }
 
         auto cameraViewMatrix = fpsCamera.getViewMatrix();
@@ -126,10 +142,7 @@ int main(int /*argc*/, char **argv)
         glClearColor(0.f, 0.5f, 1.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        program1.use();
         room1.draw(ProjMatrix, MVMatrix);
-
-        program2.use();
         room2.draw(ProjMatrix, MVMatrix);
 
         /* Swap front and back buffers */
@@ -139,7 +152,5 @@ int main(int /*argc*/, char **argv)
     }
 
     glfwTerminate();
-    return 0;
-
     return 0;
 }
