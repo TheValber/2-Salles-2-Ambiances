@@ -55,3 +55,16 @@ bool Room2::isInWall(glm::vec3 pos, float radius) const
 
     return false;
 }
+
+void Room2::deleteRoom()
+{
+    for (auto &floor : _floors)
+    {
+        floor.deleteDrawable();
+    }
+
+    for (auto &wall : _walls)
+    {
+        wall.deleteDrawable();
+    }
+}

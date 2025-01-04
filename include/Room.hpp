@@ -12,6 +12,8 @@ public:
 
     virtual bool isInWall(glm::vec3 pos, float radius) const = 0;
 
+    virtual void deleteRoom() = 0;
+
 protected:
     std::vector<DrawableSquare> _floors;
     std::vector<DrawableSquare> _walls;

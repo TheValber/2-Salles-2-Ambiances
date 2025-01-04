@@ -151,6 +151,9 @@ int main(int /*argc*/, char **argv)
         glfwPollEvents();
     }
 
+    room1.deleteRoom();
+    room2.deleteRoom();
+
     glfwTerminate();
     return 0;
 }

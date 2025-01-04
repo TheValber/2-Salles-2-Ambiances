@@ -25,6 +25,8 @@ public:
 
     virtual void setMaxPoint() = 0;
 
+    virtual void deleteDrawable() = 0;
+
     void setLocations(UniformLocations uniformLocations)
     {
         this->_uMVPMatrixLocation = uniformLocations.uMVPMatrixLocation;

@@ -108,3 +108,9 @@ bool DrawableSquare::isInside(glm::vec3 pos, float radius) const
 
     return true;
 }
+
+void DrawableSquare::deleteDrawable()
+{
+    glDeleteBuffers(1, &_vbo);
+    glDeleteVertexArrays(1, &_vao);
+}

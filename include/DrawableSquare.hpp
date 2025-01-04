@@ -22,4 +22,6 @@ public:
     void setMinPoint() override;
 
     void setMaxPoint() override;
+
+    void deleteDrawable() override;
 };
