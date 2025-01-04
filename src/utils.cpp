@@ -40,3 +40,11 @@ bool initializeGLFW(GLFWwindow *&window, int window_width, int window_height)
 
     return true;
 }
+
+glm::vec2 rotateTexCoords(const glm::vec2 &texCoords, float angle)
+{
+    glm::vec2 rotatedTexCoords;
+    rotatedTexCoords.x = texCoords.x * cos(angle) - texCoords.y * sin(angle);
+    rotatedTexCoords.y = texCoords.x * sin(angle) + texCoords.y * cos(angle);
+    return rotatedTexCoords;
+}

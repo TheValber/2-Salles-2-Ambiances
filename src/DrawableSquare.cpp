@@ -3,19 +3,27 @@
 #include "../include/DrawableSquare.hpp"
 #include <iostream>
 #include "../include/vertexAttr.hpp"
+#include "../include/utils.hpp"
 
-DrawableSquare::DrawableSquare(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+DrawableSquare::DrawableSquare(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, float textureRotation)
 {
     _position = position;
     _rotation = rotation;
     _scale = scale;
 
-    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, -0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 0)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, -0.5f), glm::vec3(0, 1, 0), glm::vec2(1, 0)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(1, 1)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, -0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 0)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(1, 1)});
-    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, 0.5f), glm::vec3(0, 1, 0), glm::vec2(0, 1)});
+    float angle = glm::radians(textureRotation);
+
+    glm::vec2 texCoord1 = rotateTexCoords(glm::vec2(0, 0), angle);
+    glm::vec2 texCoord2 = rotateTexCoords(glm::vec2(_scale.x, 0), angle);
+    glm::vec2 texCoord3 = rotateTexCoords(glm::vec2(_scale.x, _scale.z), angle);
+    glm::vec2 texCoord4 = rotateTexCoords(glm::vec2(0, _scale.z), angle);
+
+    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, -0.5f), glm::vec3(0, 1, 0), texCoord1});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, -0.5f), glm::vec3(0, 1, 0), texCoord2});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, 0.5f), glm::vec3(0, 1, 0), texCoord3});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, -0.5f), glm::vec3(0, 1, 0), texCoord1});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(0.5f, 0, 0.5f), glm::vec3(0, 1, 0), texCoord3});
+    m_Vertices.push_back(ShapeVertex{glm::vec3(-0.5f, 0, 0.5f), glm::vec3(0, 1, 0), texCoord4});
 
     m_nVertexCount = 6;
 
@@ -46,6 +54,11 @@ void DrawableSquare::initVAO()
     glBindVertexArray(0);
 }
 
+void DrawableSquare::setTexture(GLuint texture)
+{
+    _texture = texture;
+}
+
 void DrawableSquare::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const
 {
     glm::mat4 MVMat = MVMatrix * glm::translate(glm::mat4(1), _position);
@@ -57,7 +70,13 @@ void DrawableSquare::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix
     glUniformMatrix4fv(_uMVPMatrixLocation, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMat));
     glUniformMatrix4fv(_uMVMatrixLocation, 1, GL_FALSE, glm::value_ptr(MVMat));
     glUniformMatrix4fv(_uNormalMatrixLocation, 1, GL_FALSE, glm::value_ptr(NormalMat));
+
+    glBindTexture(GL_TEXTURE_2D, _texture);
+    glUniform1i(_uTextureLocation, 0);
+
     glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
+
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
 }
 

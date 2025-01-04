@@ -9,11 +9,13 @@ class DrawableSquare : public Drawable
 {
 
 public:
-    DrawableSquare(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+    DrawableSquare(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, float textureRotation = 0);
 
     void initVBO() override;
 
     void initVAO() override;
+
+    void setTexture(GLuint texture) override;
 
     void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const override;
 

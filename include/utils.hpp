@@ -4,6 +4,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <glimac/glm.hpp>
 
 /**
  * @brief Initialize GLFW library and create a window
@@ -17,3 +18,5 @@
  * @return true if initialization and window creation were successful, false otherwise.
  */
 bool initializeGLFW(GLFWwindow *&window, int window_width, int window_height);
+
+glm::vec2 rotateTexCoords(const glm::vec2 &texCoords, float angle);

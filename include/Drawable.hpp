@@ -17,6 +17,8 @@ public:
 
     virtual void initVAO() = 0;
 
+    virtual void setTexture(GLuint texture) = 0;
+
     virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const = 0;
 
     virtual bool isInside(glm::vec3 pos, float radius) const = 0;
@@ -59,6 +61,7 @@ protected:
     glm::vec3 _position;
     glm::vec3 _rotation;
     glm::vec3 _scale;
+    float _textureRotation;
 
     glm::vec3 _minPoint;
     glm::vec3 _maxPoint;
@@ -68,6 +71,8 @@ protected:
 
     GLuint _vbo;
     GLuint _vao;
+
+    GLuint _texture;
 
     GLint _uMVPMatrixLocation;
     GLint _uMVMatrixLocation;

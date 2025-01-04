@@ -114,7 +114,17 @@ int main(int /*argc*/, char **argv)
     lastY = window_height / 2;
 
     Room1 room1(testShaderLocations1);
+    if (!room1.initTextures(applicationPath.dirPath()))
+    {
+        std::cerr << "Error while loading textures" << std::endl;
+        return -1;
+    }
     Room2 room2(testShaderLocations2);
+    if (!room2.initTextures(applicationPath.dirPath()))
+    {
+        std::cerr << "Error while loading textures" << std::endl;
+        return -1;
+    }
 
     glm::mat4 defaultProjMatrix = glm::perspective(glm::radians(70.f), (float)window_width / window_height, 0.1f, 100.f);
     glm::mat4 defaultMVMatrix = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0));
@@ -127,20 +137,21 @@ int main(int /*argc*/, char **argv)
             // In the Room 1
             moveCamera(window, room1);
             program1.use();
+            glClearColor(0.f, 0.25f, 0.5f, 1.f);
         }
         else
         {
             // In the Room 2
             moveCamera(window, room2);
             program2.use();
+            glClearColor(0.f, 0.5f, 1.f, 1.f);
         }
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         auto cameraViewMatrix = fpsCamera.getViewMatrix();
         glm::mat4 ProjMatrix = defaultProjMatrix;
         glm::mat4 MVMatrix = defaultMVMatrix * cameraViewMatrix;
-
-        glClearColor(0.f, 0.5f, 1.f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         room1.draw(ProjMatrix, MVMatrix);
         room2.draw(ProjMatrix, MVMatrix);

@@ -2,6 +2,8 @@
 
 #include "../include/Room2.hpp"
 
+#include <glimac/Image.hpp>
+
 Room2::Room2(UniformLocations uniformLocations)
 {
     _floors.push_back(DrawableSquare(glm::vec3(0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
@@ -28,6 +30,45 @@ Room2::Room2(UniformLocations uniformLocations)
         wall.initVAO();
         wall.setLocations(uniformLocations);
     }
+}
+
+bool Room2::initTextures(FilePath dirPath)
+{
+    auto floorImage = loadImage(dirPath + "/assets/textures/room2Floor.png");
+    if (floorImage == nullptr)
+    {
+        return false;
+    }
+    glGenTextures(1, &_floorTexture);
+    glBindTexture(GL_TEXTURE_2D, _floorTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, floorImage->getWidth(), floorImage->getHeight(), 0, GL_RGBA, GL_FLOAT, floorImage->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    for (auto &floor : _floors)
+    {
+        floor.setTexture(_floorTexture);
+    }
+
+    auto wallImage = loadImage(dirPath + "/assets/textures/room2Wall.png");
+    if (wallImage == nullptr)
+    {
+        return false;
+    }
+    glGenTextures(1, &_wallTexture);
+    glBindTexture(GL_TEXTURE_2D, _wallTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wallImage->getWidth(), wallImage->getHeight(), 0, GL_RGBA, GL_FLOAT, wallImage->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    for (auto &wall : _walls)
+    {
+        wall.setTexture(_wallTexture);
+    }
+
+    return true;
 }
 
 void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const
@@ -67,4 +108,10 @@ void Room2::deleteRoom()
     {
         wall.deleteDrawable();
     }
+
+    glDeleteTextures(1, &_floorTexture);
+    glDeleteTextures(1, &_wallTexture);
+
+    _floors.clear();
+    _walls.clear();
 }
