@@ -18,7 +18,11 @@ public:
 
     void deleteRoom() override;
 
+    void setLightOn(bool lightOn);
+
 private:
     std::vector<glm::vec3> _lightsPositions;
     std::vector<glm::vec3> _lightsColors;
+
+    bool _isLightOn = true;
 };

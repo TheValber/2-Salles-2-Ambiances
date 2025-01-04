@@ -92,7 +92,14 @@ void Room1::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, Uniform
     {
         glm::vec3 lightPos1 = glm::vec3(MVMatrix * glm::vec4(_lightsPositions[0], 1.0));
         glUniform3f(uniformLocations.uLight1Pos_vsLocation, lightPos1.x, lightPos1.y, lightPos1.z);
-        glUniform3f(uniformLocations.uLight1IntensityLocation, _lightsColors[0].x, _lightsColors[0].y, _lightsColors[0].z);
+        if (_isLightOn)
+        {
+            glUniform3f(uniformLocations.uLight1IntensityLocation, _lightsColors[0].x, _lightsColors[0].y, _lightsColors[0].z);
+        }
+        else
+        {
+            glUniform3f(uniformLocations.uLight1IntensityLocation, 0.f, 0.f, 0.f);
+        }
 
         glm::vec3 lightPos2 = glm::vec3(MVMatrix * glm::vec4(_lightsPositions[1], 1.0));
         glUniform3f(uniformLocations.uLight2Pos_vsLocation, lightPos2.x, lightPos2.y, lightPos2.z);
@@ -150,4 +157,9 @@ void Room1::deleteRoom()
 
     _floors.clear();
     _walls.clear();
+}
+
+void Room1::setLightOn(bool lightOn)
+{
+    _isLightOn = lightOn;
 }

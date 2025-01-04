@@ -24,6 +24,8 @@ auto fpsCamera = FPSCamera(0.07f, 0.2f, 0.3f);
 double lastX = 0;
 double lastY = 0;
 
+bool isLightOn = true;
+
 static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/)
 {
     if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
@@ -42,6 +44,10 @@ static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int acti
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         }
         isWireframe = !isWireframe;
+    }
+    else if (action == GLFW_PRESS && key == GLFW_KEY_E)
+    {
+        isLightOn = !isLightOn;
     }
 }
 
@@ -144,6 +150,7 @@ int main(int /*argc*/, char **argv)
             moveCamera(window, room1);
             program1.use();
             uniformLocations = uniformLocations1;
+            room1.setLightOn(isLightOn);
             glClearColor(0.f, 0.02f, 0.05f, 1.f);
         }
         else
