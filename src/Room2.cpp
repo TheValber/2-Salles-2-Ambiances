@@ -4,7 +4,8 @@
 
 #include <glimac/Image.hpp>
 
-Room2::Room2()
+Room2::Room2() : _rock1(Rock(glm::vec3(15.f, 0.f, -6.f), glm::vec3(20.f, 0.f, 10.f), glm::vec3(1.5f, 0.8f, 2.f))),
+                 _rock2(Rock(glm::vec3(12.5f, 0.f, -7.5f), glm::vec3(10.f, 0.f, 20.f), glm::vec3(2.2f, 1.2f, 1.7f)))
 {
     _floors.push_back(DrawableSquare(glm::vec3(0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
     _floors.push_back(DrawableSquare(glm::vec3(11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 24.f)));
@@ -28,6 +29,12 @@ Room2::Room2()
         wall.initVBO();
         wall.initVAO();
     }
+
+    _rock1.initVBO();
+    _rock1.initVAO();
+
+    _rock2.initVBO();
+    _rock2.initVAO();
 
     _lightDirection = glm::vec3(-1.f, 1.f, -1.f);
     _lightColor = glm::vec3(1.f, 1.f, 1.f);
@@ -79,6 +86,21 @@ bool Room2::initTextures(FilePath dirPath)
         wall.setTexture(_wallTexture);
     }
 
+    auto rockImage = loadImage(dirPath + "/assets/textures/streetLight.png"); // TODO: change to rock texture
+    if (rockImage == nullptr)
+    {
+        return false;
+    }
+    glGenTextures(1, &_rockTexture);
+    glBindTexture(GL_TEXTURE_2D, _rockTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, rockImage->getWidth(), rockImage->getHeight(), 0, GL_RGBA, GL_FLOAT, rockImage->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    _rock1.setTexture(_rockTexture);
+    _rock2.setTexture(_rockTexture);
+
     return true;
 }
 
@@ -110,6 +132,9 @@ void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, Uniform
     {
         wall.draw(ProjMatrix, MVMatrix, uniformLocations);
     }
+
+    _rock1.draw(ProjMatrix, MVMatrix, uniformLocations);
+    _rock2.draw(ProjMatrix, MVMatrix, uniformLocations);
 }
 
 bool Room2::isInWall(glm::vec3 pos, float radius) const
@@ -120,6 +145,11 @@ bool Room2::isInWall(glm::vec3 pos, float radius) const
         {
             return true;
         }
+    }
+
+    if (_rock1.isInside(pos, radius + 0.5f) || _rock2.isInside(pos, radius + 0.5f))
+    {
+        return true;
     }
 
     return false;
@@ -137,8 +167,12 @@ void Room2::deleteRoom()
         wall.deleteDrawable();
     }
 
+    _rock1.deleteDrawable();
+    _rock2.deleteDrawable();
+
     glDeleteTextures(1, &_floorTexture);
     glDeleteTextures(1, &_wallTexture);
+    glDeleteTextures(1, &_rockTexture);
 
     _floors.clear();
     _walls.clear();

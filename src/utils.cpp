@@ -55,49 +55,49 @@ void insertCubeVertices(glm::vec3 position, glm::vec3 scale, std::vector<ShapeVe
 
     // Haut
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 1, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 1, 0), glm::vec2(1, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 1, 0), glm::vec2(1, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 1, 0), glm::vec2(scale.x, 0)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 1, 0), glm::vec2(scale.x, scale.z)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 1, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 1, 0), glm::vec2(1, 1)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 1, 0), glm::vec2(0, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 1, 0), glm::vec2(scale.x, scale.z)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 1, 0), glm::vec2(0, scale.z)});
 
     // Bas
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, -1, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, -1, 0), glm::vec2(1, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, -1, 0), glm::vec2(1, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, -1, 0), glm::vec2(scale.x, 0)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, -1, 0), glm::vec2(scale.x, scale.z)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, -1, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, -1, 0), glm::vec2(1, 1)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, -1, 0), glm::vec2(0, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, -1, 0), glm::vec2(scale.x, scale.z)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, -1, 0), glm::vec2(0, scale.z)});
 
     // Devant
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(1, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(1, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(scale.x, 0)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(scale.x, scale.y)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(1, 1)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(0, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(scale.x, scale.y)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(0, 0, 1), glm::vec2(0, scale.y)});
 
     // Derrière
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(1, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(1, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(scale.x, 0)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(scale.x, scale.y)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(1, 1)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(0, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(scale.x, scale.y)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(0, 0, -1), glm::vec2(0, scale.y)});
 
     // Gauche
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(1, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(1, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(scale.y, 0)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(scale.y, scale.z)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(1, 1)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(0, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(scale.y, scale.z)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x - demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(-1, 0, 0), glm::vec2(0, scale.z)});
 
     // Droite
     vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(1, 0, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(1, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(1, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(scale.y, 0)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(scale.y, scale.z)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y - demiScale.y, position.z - demiScale.z), glm::vec3(1, 0, 0), glm::vec2(0, 0)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(1, 1)});
-    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(1, 0, 0), glm::vec2(0, 1)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(scale.y, scale.z)});
+    vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(1, 0, 0), glm::vec2(0, scale.z)});
 }

@@ -1,48 +1,29 @@
-// StreetLight.cpp
+// Rock.cpp
 
-#include "../include/StreetLight.hpp"
+#include "../include/Rock.hpp"
 #include <iostream>
 #include "../include/vertexAttr.hpp"
 #include "../include/utils.hpp"
 
-StreetLight::StreetLight(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+Rock::Rock(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-
     _position = position;
     _rotation = rotation;
     _scale = scale;
 
-    // Base
-    insertCubeVertices(glm::vec3(0.f, 0.125f, 0.f), glm::vec3(0.75f, 0.25f, 0.75f), m_Vertices);
-
-    // Poteau
-    insertCubeVertices(glm::vec3(0.f, 1.25f, 0.f), glm::vec3(0.2f, 2.5f, 0.2f), m_Vertices);
-
-    // Chapeau Bas
-    insertCubeVertices(glm::vec3(0.f, 2.625f, 0.f), glm::vec3(0.5f, 0.25f, 0.5f), m_Vertices);
-    insertCubeVertices(glm::vec3(0.f, 2.875f, 0.f), glm::vec3(1.f, 0.25f, 1.f), m_Vertices);
-
-    // Chapeau Haut
-    insertCubeVertices(glm::vec3(0.f, 4.125f, 0.f), glm::vec3(1.f, 0.25f, 1.f), m_Vertices);
-    insertCubeVertices(glm::vec3(0.f, 4.375f, 0.f), glm::vec3(0.5f, 0.25f, 0.5f), m_Vertices);
-
-    // Piliers
-    insertCubeVertices(glm::vec3(0.4f, 3.5f, 0.4f), glm::vec3(0.15f, 1.f, 0.15f), m_Vertices);
-    insertCubeVertices(glm::vec3(-0.4f, 3.5f, 0.4f), glm::vec3(0.15f, 1.f, 0.15f), m_Vertices);
-    insertCubeVertices(glm::vec3(0.4f, 3.5f, -0.4f), glm::vec3(0.15f, 1.f, 0.15f), m_Vertices);
-    insertCubeVertices(glm::vec3(-0.4f, 3.5f, -0.4f), glm::vec3(0.15f, 1.f, 0.15f), m_Vertices);
+    generateRock(0.1f, 3);
 
     m_nVertexCount = m_Vertices.size();
 
-    _Kd = glm::vec3(0.2f, 0.2f, 0.2f);
-    _Ks = glm::vec3(0.8f, 0.8f, 0.8f);
-    _Shininess = 75.f;
+    _Kd = glm::vec3(0.5f, 0.5f, 0.5f);
+    _Ks = glm::vec3(0.1f, 0.1f, 0.1f);
+    _Shininess = 15.f;
 
     setMinPoint();
     setMaxPoint();
 }
 
-void StreetLight::initVBO()
+void Rock::initVBO()
 {
     glGenBuffers(1, &_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
@@ -50,7 +31,7 @@ void StreetLight::initVBO()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void StreetLight::initVAO()
+void Rock::initVAO()
 {
     glGenVertexArrays(1, &_vao);
     glBindVertexArray(_vao);
@@ -65,12 +46,12 @@ void StreetLight::initVAO()
     glBindVertexArray(0);
 }
 
-void StreetLight::setTexture(GLuint texture)
+void Rock::setTexture(GLuint texture)
 {
     _texture = texture;
 }
 
-void StreetLight::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations) const
+void Rock::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations) const
 {
     glm::mat4 MVMat = MVMatrix * glm::translate(glm::mat4(1), _position);
     MVMat = MVMat * glm::rotate(glm::mat4(1), glm::radians(_rotation.x), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1), glm::radians(_rotation.y), glm::vec3(0, 1, 0)) * glm::rotate(glm::mat4(1), glm::radians(_rotation.z), glm::vec3(0, 0, 1));
@@ -95,9 +76,9 @@ void StreetLight::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, U
     glBindVertexArray(0);
 }
 
-void StreetLight::setMinPoint()
+void Rock::setMinPoint()
 {
-    glm::vec3 point(-0.1f, 0.0f, -0.1f);
+    glm::vec3 point(-1.f, -1.f, -1.f);
 
     point *= _scale;
 
@@ -111,9 +92,9 @@ void StreetLight::setMinPoint()
     _minPoint = point;
 }
 
-void StreetLight::setMaxPoint()
+void Rock::setMaxPoint()
 {
-    glm::vec3 point(0.1f, 4.f, 0.1f);
+    glm::vec3 point(1.f, 1.f, 1.f);
 
     point *= _scale;
 
@@ -127,7 +108,7 @@ void StreetLight::setMaxPoint()
     _maxPoint = point;
 }
 
-bool StreetLight::isInside(glm::vec3 pos, float radius) const
+bool Rock::isInside(glm::vec3 pos, float radius) const
 {
 
     if (pos.x + radius < _minPoint.x || pos.x - radius > _maxPoint.x)
@@ -143,8 +124,99 @@ bool StreetLight::isInside(glm::vec3 pos, float radius) const
     return true;
 }
 
-void StreetLight::deleteDrawable()
+void Rock::deleteDrawable()
 {
     glDeleteBuffers(1, &_vbo);
     glDeleteVertexArrays(1, &_vao);
+}
+
+void Rock::generateRock(float noiseStrength, int subdivisions)
+{
+    // Définir les sommets de base d'une boîte
+    std::vector<glm::vec3> baseVertices = {
+        glm::vec3(-1, -1, -1), glm::vec3(1, -1, -1),
+        glm::vec3(1, -1, 1), glm::vec3(-1, -1, 1),
+        glm::vec3(-1, 1, -1), glm::vec3(1, 1, -1),
+        glm::vec3(1, 1, 1), glm::vec3(-1, 1, 1)};
+
+    // Définir les indices pour former les faces initiales
+    std::vector<glm::ivec3> faces = {
+        {0, 1, 2}, {0, 2, 3}, // Bas
+        {4, 5, 6},
+        {4, 6, 7}, // Haut
+        {0, 1, 5},
+        {0, 5, 4}, // Face avant
+        {1, 2, 6},
+        {1, 6, 5}, // Droite
+        {2, 3, 7},
+        {2, 7, 6}, // Arrière
+        {3, 0, 4},
+        {3, 4, 7} // Gauche
+    };
+
+    // Ajouter bruit initial aux sommets
+    for (auto &vertex : baseVertices)
+    {
+        vertex += glm::sphericalRand(noiseStrength);
+    }
+
+    // Subdivision des faces
+    for (int i = 0; i < subdivisions; ++i)
+    {
+        std::vector<glm::ivec3> newFaces;
+        std::map<std::pair<int, int>, int> edgeMidpoints;
+
+        for (const auto &face : faces)
+        {
+            int mid0 = getMidpoint(edgeMidpoints, baseVertices, face.x, face.y);
+            int mid1 = getMidpoint(edgeMidpoints, baseVertices, face.y, face.z);
+            int mid2 = getMidpoint(edgeMidpoints, baseVertices, face.z, face.x);
+
+            newFaces.push_back({face.x, mid0, mid2});
+            newFaces.push_back({face.y, mid1, mid0});
+            newFaces.push_back({face.z, mid2, mid1});
+            newFaces.push_back({mid0, mid1, mid2});
+        }
+
+        faces = newFaces;
+    }
+
+    // Ajouter bruit final
+    for (auto &vertex : baseVertices)
+    {
+        vertex += glm::sphericalRand(noiseStrength / 2.0f);
+    }
+
+    // Construire les sommets pour le rendu
+    for (const auto &face : faces)
+    {
+        glm::vec3 v0 = baseVertices[face.x];
+        glm::vec3 v1 = baseVertices[face.y];
+        glm::vec3 v2 = baseVertices[face.z];
+
+        glm::vec3 normal = -glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+        m_Vertices.push_back({v0, normal, glm::vec2(0, 0)});
+        m_Vertices.push_back({v1, normal, glm::vec2(1, 0)});
+        m_Vertices.push_back({v2, normal, glm::vec2(0.5f, 1)});
+    }
+}
+
+int Rock::getMidpoint(std::map<std::pair<int, int>, int> &edgeMidpoints,
+                      std::vector<glm::vec3> &vertices,
+                      int a, int b)
+{
+    std::pair<int, int> edge = std::minmax(a, b);
+    auto it = edgeMidpoints.find(edge);
+    if (it != edgeMidpoints.end())
+    {
+        return it->second;
+    }
+
+    glm::vec3 midpoint = (vertices[a] + vertices[b]) * 0.5f;
+    midpoint += glm::sphericalRand(0.1f); // Ajout de bruit sur les arêtes
+    vertices.push_back(midpoint);
+    int index = vertices.size() - 1;
+    edgeMidpoints[edge] = index;
+    return index;
 }
