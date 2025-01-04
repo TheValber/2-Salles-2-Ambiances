@@ -86,7 +86,7 @@ bool Room2::initTextures(FilePath dirPath)
         wall.setTexture(_wallTexture);
     }
 
-    auto rockImage = loadImage(dirPath + "/assets/textures/streetLight.png"); // TODO: change to rock texture
+    auto rockImage = loadImage(dirPath + "/assets/textures/rock.png");
     if (rockImage == nullptr)
     {
         return false;
