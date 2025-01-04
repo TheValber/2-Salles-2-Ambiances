@@ -90,21 +90,17 @@ int main(int /*argc*/, char **argv)
 
     FilePath applicationPath(argv[0]);
 
-    // TEMPORARY 1 //////////////
-    Program program1 = loadProgram(applicationPath.dirPath() + "/shaders/test1.vs.glsl",
-                                   applicationPath.dirPath() + "/shaders/test1.fs.glsl");
+    Program program1 = loadProgram(applicationPath.dirPath() + "/shaders/room1.vs.glsl",
+                                   applicationPath.dirPath() + "/shaders/room1.fs.glsl");
     program1.use();
 
-    UniformLocations testShaderLocations1(program1);
-    //////////////////////
+    UniformLocations uniformLocations1(program1);
 
-    // TEMPORARY 2 //////////////
-    Program program2 = loadProgram(applicationPath.dirPath() + "/shaders/test2.vs.glsl",
-                                   applicationPath.dirPath() + "/shaders/test2.fs.glsl");
+    Program program2 = loadProgram(applicationPath.dirPath() + "/shaders/room2.vs.glsl",
+                                   applicationPath.dirPath() + "/shaders/room2.fs.glsl");
     program2.use();
 
-    UniformLocations testShaderLocations2(program2);
-    //////////////////////
+    UniformLocations uniformLocations2(program2);
 
     glfwSetKeyCallback(window, &key_callback);
     glfwSetWindowSizeCallback(window, &size_callback);
@@ -113,13 +109,13 @@ int main(int /*argc*/, char **argv)
     lastX = window_width / 2;
     lastY = window_height / 2;
 
-    Room1 room1(testShaderLocations1);
+    Room1 room1 = Room1();
     if (!room1.initTextures(applicationPath.dirPath()))
     {
         std::cerr << "Error while loading textures" << std::endl;
         return -1;
     }
-    Room2 room2(testShaderLocations2);
+    Room2 room2 = Room2();
     if (!room2.initTextures(applicationPath.dirPath()))
     {
         std::cerr << "Error while loading textures" << std::endl;
@@ -129,32 +125,38 @@ int main(int /*argc*/, char **argv)
     glm::mat4 defaultProjMatrix = glm::perspective(glm::radians(70.f), (float)window_width / window_height, 0.1f, 100.f);
     glm::mat4 defaultMVMatrix = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0));
 
+    UniformLocations uniformLocations = uniformLocations1;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        if (fpsCamera.getPosition().x < 0)
+        auto cameraViewMatrix = fpsCamera.getViewMatrix();
+        glm::mat4 ProjMatrix = defaultProjMatrix;
+        glm::mat4 MVMatrix = defaultMVMatrix * cameraViewMatrix;
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        int roomNb = fpsCamera.getPosition().x < 0 ? 1 : 2;
+
+        if (roomNb == 1)
         {
             // In the Room 1
             moveCamera(window, room1);
             program1.use();
-            glClearColor(0.f, 0.25f, 0.5f, 1.f);
+            uniformLocations = uniformLocations1;
+            glClearColor(0.f, 0.02f, 0.05f, 1.f);
         }
         else
         {
             // In the Room 2
             moveCamera(window, room2);
             program2.use();
+            uniformLocations = uniformLocations2;
             glClearColor(0.f, 0.5f, 1.f, 1.f);
         }
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        auto cameraViewMatrix = fpsCamera.getViewMatrix();
-        glm::mat4 ProjMatrix = defaultProjMatrix;
-        glm::mat4 MVMatrix = defaultMVMatrix * cameraViewMatrix;
-
-        room1.draw(ProjMatrix, MVMatrix);
-        room2.draw(ProjMatrix, MVMatrix);
+        room1.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 1);
+        room2.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 2);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

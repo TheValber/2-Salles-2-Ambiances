@@ -17,7 +17,7 @@ public:
 
     void setTexture(GLuint texture) override;
 
-    void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const override;
+    void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations) const override;
 
     bool isInside(glm::vec3 pos, float radius) const override;
 

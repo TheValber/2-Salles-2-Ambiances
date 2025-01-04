@@ -19,7 +19,7 @@ public:
 
     virtual void setTexture(GLuint texture) = 0;
 
-    virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const = 0;
+    virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations) const = 0;
 
     virtual bool isInside(glm::vec3 pos, float radius) const = 0;
 
@@ -28,14 +28,6 @@ public:
     virtual void setMaxPoint() = 0;
 
     virtual void deleteDrawable() = 0;
-
-    void setLocations(UniformLocations uniformLocations)
-    {
-        this->_uMVPMatrixLocation = uniformLocations.uMVPMatrixLocation;
-        this->_uMVMatrixLocation = uniformLocations.uMVMatrixLocation;
-        this->_uNormalMatrixLocation = uniformLocations.uNormalMatrixLocation;
-        this->_uTextureLocation = uniformLocations.uTextureLocation;
-    }
 
     /**
      * @brief Get the pointer to the data
@@ -73,9 +65,4 @@ protected:
     GLuint _vao;
 
     GLuint _texture;
-
-    GLint _uMVPMatrixLocation;
-    GLint _uMVMatrixLocation;
-    GLint _uNormalMatrixLocation;
-    GLint _uTextureLocation;
 };

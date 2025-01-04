@@ -10,7 +10,7 @@ class Room
 public:
     virtual bool initTextures(FilePath dirPath) = 0;
 
-    virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const = 0;
+    virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations, bool renderLights) const = 0;
 
     virtual bool isInWall(glm::vec3 pos, float radius) const = 0;
 
@@ -22,4 +22,14 @@ protected:
 
     GLuint _floorTexture;
     GLuint _wallTexture;
+
+    glm::vec3 _ambientLight;
+
+    glm::vec3 _floorsKd;
+    glm::vec3 _floorsKs;
+    float _floorsShininess;
+
+    glm::vec3 _wallsKd;
+    glm::vec3 _wallsKs;
+    float _wallsShininess;
 };

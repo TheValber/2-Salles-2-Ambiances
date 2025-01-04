@@ -59,7 +59,7 @@ void DrawableSquare::setTexture(GLuint texture)
     _texture = texture;
 }
 
-void DrawableSquare::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const
+void DrawableSquare::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations) const
 {
     glm::mat4 MVMat = MVMatrix * glm::translate(glm::mat4(1), _position);
     MVMat = MVMat * glm::rotate(glm::mat4(1), glm::radians(_rotation.x), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1), glm::radians(_rotation.y), glm::vec3(0, 1, 0)) * glm::rotate(glm::mat4(1), glm::radians(_rotation.z), glm::vec3(0, 0, 1));
@@ -67,12 +67,12 @@ void DrawableSquare::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix
     glm::mat4 NormalMat = glm::transpose(glm::inverse(MVMat));
 
     glBindVertexArray(_vao);
-    glUniformMatrix4fv(_uMVPMatrixLocation, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMat));
-    glUniformMatrix4fv(_uMVMatrixLocation, 1, GL_FALSE, glm::value_ptr(MVMat));
-    glUniformMatrix4fv(_uNormalMatrixLocation, 1, GL_FALSE, glm::value_ptr(NormalMat));
+    glUniformMatrix4fv(uniformLocations.uMVPMatrixLocation, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMat));
+    glUniformMatrix4fv(uniformLocations.uMVMatrixLocation, 1, GL_FALSE, glm::value_ptr(MVMat));
+    glUniformMatrix4fv(uniformLocations.uNormalMatrixLocation, 1, GL_FALSE, glm::value_ptr(NormalMat));
 
     glBindTexture(GL_TEXTURE_2D, _texture);
-    glUniform1i(_uTextureLocation, 0);
+    glUniform1i(uniformLocations.uTextureLocation, 0);
 
     glDrawArrays(GL_TRIANGLES, 0, getVertexCount());
 

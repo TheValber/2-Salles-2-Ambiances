@@ -4,7 +4,7 @@
 
 #include <glimac/Image.hpp>
 
-Room1::Room1(UniformLocations uniformLocations)
+Room1::Room1()
 {
     _floors.push_back(DrawableSquare(glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
     _floors.push_back(DrawableSquare(glm::vec3(-11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 24.f)));
@@ -21,15 +21,30 @@ Room1::Room1(UniformLocations uniformLocations)
     {
         floor.initVBO();
         floor.initVAO();
-        floor.setLocations(uniformLocations);
     }
 
     for (auto &wall : _walls)
     {
         wall.initVBO();
         wall.initVAO();
-        wall.setLocations(uniformLocations);
     }
+
+    _lightsPositions = {
+        glm::vec3(-10.f, 4.f, 0.f),
+        glm::vec3(-4.f, 1.f, 10.f)};
+    _lightsColors = {
+        glm::vec3(0.8f, 0.6f, 0.4f),
+        glm::vec3(0.4f, 0.8f, 0.4f)};
+
+    _ambientLight = glm::vec3(0.02f, 0.02f, 0.06f);
+
+    _floorsKd = glm::vec3(0.5f, 0.5f, 0.5f);
+    _floorsKs = glm::vec3(0.1f, 0.1f, 0.1f);
+    _floorsShininess = 15.f;
+
+    _wallsKd = glm::vec3(0.6f, 0.6f, 0.6f);
+    _wallsKs = glm::vec3(0.1f, 0.1f, 0.1f);
+    _wallsShininess = 15.f;
 }
 
 bool Room1::initTextures(FilePath dirPath)
@@ -71,16 +86,37 @@ bool Room1::initTextures(FilePath dirPath)
     return true;
 }
 
-void Room1::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const
+void Room1::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations, bool renderLights) const
 {
+    if (renderLights)
+    {
+        glm::vec3 lightPos1 = glm::vec3(MVMatrix * glm::vec4(_lightsPositions[0], 1.0));
+        glUniform3f(uniformLocations.uLight1Pos_vsLocation, lightPos1.x, lightPos1.y, lightPos1.z);
+        glUniform3f(uniformLocations.uLight1IntensityLocation, _lightsColors[0].x, _lightsColors[0].y, _lightsColors[0].z);
+
+        glm::vec3 lightPos2 = glm::vec3(MVMatrix * glm::vec4(_lightsPositions[1], 1.0));
+        glUniform3f(uniformLocations.uLight2Pos_vsLocation, lightPos2.x, lightPos2.y, lightPos2.z);
+        glUniform3f(uniformLocations.uLight2IntensityLocation, _lightsColors[1].x, _lightsColors[1].y, _lightsColors[1].z);
+
+        glUniform3f(uniformLocations.uAmbientLightLocation, _ambientLight.x, _ambientLight.y, _ambientLight.z);
+    }
+
+    glUniform3f(uniformLocations.uKdLocation, _floorsKd.x, _floorsKd.y, _floorsKd.z);
+    glUniform3f(uniformLocations.uKsLocation, _floorsKs.x, _floorsKs.y, _floorsKs.z);
+    glUniform1f(uniformLocations.uShininessLocation, _floorsShininess);
+
     for (const auto &floor : _floors)
     {
-        floor.draw(ProjMatrix, MVMatrix);
+        floor.draw(ProjMatrix, MVMatrix, uniformLocations);
     }
+
+    glUniform3f(uniformLocations.uKdLocation, _wallsKd.x, _wallsKd.y, _wallsKd.z);
+    glUniform3f(uniformLocations.uKsLocation, _wallsKs.x, _wallsKs.y, _wallsKs.z);
+    glUniform1f(uniformLocations.uShininessLocation, _wallsShininess);
 
     for (const auto &wall : _walls)
     {
-        wall.draw(ProjMatrix, MVMatrix);
+        wall.draw(ProjMatrix, MVMatrix, uniformLocations);
     }
 }
 

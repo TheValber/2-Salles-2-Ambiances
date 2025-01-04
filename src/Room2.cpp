@@ -4,7 +4,7 @@
 
 #include <glimac/Image.hpp>
 
-Room2::Room2(UniformLocations uniformLocations)
+Room2::Room2()
 {
     _floors.push_back(DrawableSquare(glm::vec3(0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
     _floors.push_back(DrawableSquare(glm::vec3(11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 24.f)));
@@ -21,15 +21,26 @@ Room2::Room2(UniformLocations uniformLocations)
     {
         floor.initVBO();
         floor.initVAO();
-        floor.setLocations(uniformLocations);
     }
 
     for (auto &wall : _walls)
     {
         wall.initVBO();
         wall.initVAO();
-        wall.setLocations(uniformLocations);
     }
+
+    _lightDirection = glm::vec3(-1.f, 1.f, -1.f);
+    _lightColor = glm::vec3(1.f, 1.f, 1.f);
+
+    _ambientLight = glm::vec3(0.2f, 0.2f, 0.2f);
+
+    _floorsKd = glm::vec3(0.3f, 0.3f, 0.3f);
+    _floorsKs = glm::vec3(0.1f, 0.1f, 0.1f);
+    _floorsShininess = 10.f;
+
+    _wallsKd = glm::vec3(0.4f, 0.4f, 0.4f);
+    _wallsKs = glm::vec3(0.2f, 0.2f, 0.2f);
+    _wallsShininess = 20.f;
 }
 
 bool Room2::initTextures(FilePath dirPath)
@@ -71,16 +82,33 @@ bool Room2::initTextures(FilePath dirPath)
     return true;
 }
 
-void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix) const
+void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations, bool renderLights) const
 {
+    if (renderLights)
+    {
+        glm::vec3 lightDir = glm::vec3(MVMatrix * glm::vec4(_lightDirection, 0.0));
+        glUniform3f(uniformLocations.uLightDir_vsLocation, lightDir.x, lightDir.y, lightDir.z);
+        glUniform3f(uniformLocations.uLightIntensityLocation, _lightColor.x, _lightColor.y, _lightColor.z);
+
+        glUniform3f(uniformLocations.uAmbientLightLocation, _ambientLight.x, _ambientLight.y, _ambientLight.z);
+    }
+
+    glUniform3f(uniformLocations.uKdLocation, _floorsKd.x, _floorsKd.y, _floorsKd.z);
+    glUniform3f(uniformLocations.uKsLocation, _floorsKs.x, _floorsKs.y, _floorsKs.z);
+    glUniform1f(uniformLocations.uShininessLocation, _floorsShininess);
+
     for (const auto &floor : _floors)
     {
-        floor.draw(ProjMatrix, MVMatrix);
+        floor.draw(ProjMatrix, MVMatrix, uniformLocations);
     }
+
+    glUniform3f(uniformLocations.uKdLocation, _wallsKd.x, _wallsKd.y, _wallsKd.z);
+    glUniform3f(uniformLocations.uKsLocation, _wallsKs.x, _wallsKs.y, _wallsKs.z);
+    glUniform1f(uniformLocations.uShininessLocation, _wallsShininess);
 
     for (const auto &wall : _walls)
     {
-        wall.draw(ProjMatrix, MVMatrix);
+        wall.draw(ProjMatrix, MVMatrix, uniformLocations);
     }
 }
 
