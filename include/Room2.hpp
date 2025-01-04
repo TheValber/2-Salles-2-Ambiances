@@ -5,6 +5,7 @@
 
 #include "UniformLocations.hpp"
 #include "Rock.hpp"
+#include "Cottage.hpp"
 
 class Room2 : public Room
 {
@@ -26,4 +27,7 @@ private:
     Rock _rock1;
     Rock _rock2;
     GLuint _rockTexture;
+
+    Cottage _cottage;
+    GLuint _cottageTexture;
 };
