@@ -4,6 +4,7 @@
 #include "Room.hpp"
 
 #include "UniformLocations.hpp"
+#include "StreetLight.hpp"
 
 class Room1 : public Room
 {
@@ -23,6 +24,9 @@ public:
 private:
     std::vector<glm::vec3> _lightsPositions;
     std::vector<glm::vec3> _lightsColors;
+
+    StreetLight _streetLight;
+    GLuint _streetLightTexture;
 
     bool _isLightOn = true;
 };

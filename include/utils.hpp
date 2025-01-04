@@ -5,6 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <glimac/glm.hpp>
+#include <glimac/common.hpp>
+
+using namespace glimac;
 
 /**
  * @brief Initialize GLFW library and create a window
@@ -20,3 +23,5 @@
 bool initializeGLFW(GLFWwindow *&window, int window_width, int window_height);
 
 glm::vec2 rotateTexCoords(const glm::vec2 &texCoords, float angle);
+
+void insertCubeVertices(glm::vec3 position, glm::vec3 scale, std::vector<ShapeVertex> &vertices);

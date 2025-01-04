@@ -151,7 +151,7 @@ int main(int /*argc*/, char **argv)
             program1.use();
             uniformLocations = uniformLocations1;
             room1.setLightOn(isLightOn);
-            glClearColor(0.f, 0.02f, 0.05f, 1.f);
+            glClearColor(0.f, 0.05f, 0.1f, 1.f);
         }
         else
         {
