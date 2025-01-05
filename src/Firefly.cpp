@@ -180,6 +180,10 @@ void Firefly::deleteDrawable()
 {
     glDeleteBuffers(1, &_vbo);
     glDeleteVertexArrays(1, &_vao);
+    glDeleteBuffers(1, &_vboWings);
+    glDeleteVertexArrays(1, &_vaoWings);
+    glDeleteBuffers(1, &_vboLight);
+    glDeleteVertexArrays(1, &_vaoLight);
 }
 
 glm::vec3 Firefly::getLightPosition() const
