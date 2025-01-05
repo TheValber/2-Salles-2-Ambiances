@@ -4,7 +4,8 @@
 
 #include <glimac/Image.hpp>
 
-Room1::Room1() : _streetLight(StreetLight(glm::vec3(-10.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)))
+Room1::Room1() : _streetLight(StreetLight(glm::vec3(-10.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f))),
+                 _firefly(Firefly(glm::vec3(-10.f, 1.5f, 6.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(.25f, .25f, .25f)))
 {
     _floors.push_back(DrawableSquare(glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
     _floors.push_back(DrawableSquare(glm::vec3(-11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 24.f)));
@@ -32,9 +33,12 @@ Room1::Room1() : _streetLight(StreetLight(glm::vec3(-10.f, 0.f, 0.f), glm::vec3(
     _streetLight.initVBO();
     _streetLight.initVAO();
 
+    _firefly.initVBO();
+    _firefly.initVAO();
+
     _lightsPositions = {
         glm::vec3(-10.f, 3.5f, 0.f),
-        glm::vec3(-4.f, 1.f, 10.f)};
+        _firefly.getLightPosition()};
     _lightsColors = {
         glm::vec3(0.9f, 0.7f, 0.5f),
         glm::vec3(0.4f, 0.8f, 0.4f)};
@@ -100,6 +104,34 @@ bool Room1::initTextures(FilePath dirPath)
 
     _streetLight.setTexture(_streetLightTexture);
 
+    auto fireflyImage = loadImage(dirPath + "/assets/textures/firefly.png");
+    if (fireflyImage == nullptr)
+    {
+        return false;
+    }
+    glGenTextures(1, &_fireflyTexture);
+    glBindTexture(GL_TEXTURE_2D, _fireflyTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fireflyImage->getWidth(), fireflyImage->getHeight(), 0, GL_RGBA, GL_FLOAT, fireflyImage->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    _firefly.setTexture(_fireflyTexture);
+
+    auto fireflyImage2 = loadImage(dirPath + "/assets/textures/firefly2.png");
+    if (fireflyImage2 == nullptr)
+    {
+        return false;
+    }
+    glGenTextures(1, &_fireflyTexture2);
+    glBindTexture(GL_TEXTURE_2D, _fireflyTexture2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fireflyImage2->getWidth(), fireflyImage2->getHeight(), 0, GL_RGBA, GL_FLOAT, fireflyImage2->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    _firefly.setTexture2(_fireflyTexture2);
+
     return true;
 }
 
@@ -144,6 +176,8 @@ void Room1::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, Uniform
     }
 
     _streetLight.draw(ProjMatrix, MVMatrix, uniformLocations);
+
+    _firefly.draw(ProjMatrix, MVMatrix, uniformLocations);
 }
 
 bool Room1::isInWall(glm::vec3 pos, float radius) const
@@ -178,9 +212,12 @@ void Room1::deleteRoom()
 
     _streetLight.deleteDrawable();
 
+    _firefly.deleteDrawable();
+
     glDeleteTextures(1, &_floorTexture);
     glDeleteTextures(1, &_wallTexture);
     glDeleteTextures(1, &_streetLightTexture);
+    glDeleteTextures(1, &_fireflyTexture);
 
     _floors.clear();
     _walls.clear();
@@ -191,4 +228,10 @@ void Room1::deleteRoom()
 void Room1::setLightOn(bool lightOn)
 {
     _isLightOn = lightOn;
+}
+
+void Room1::animate()
+{
+    _firefly.animate();
+    _lightsPositions[1] = _firefly.getLightPosition();
 }

@@ -101,3 +101,45 @@ void insertCubeVertices(glm::vec3 position, glm::vec3 scale, std::vector<ShapeVe
     vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z + demiScale.z), glm::vec3(1, 0, 0), glm::vec2(scale.z, scale.y)});
     vertices.push_back(ShapeVertex{glm::vec3(position.x + demiScale.x, position.y + demiScale.y, position.z - demiScale.z), glm::vec3(1, 0, 0), glm::vec2(0, scale.y)});
 }
+
+void insertSphereVertices(glm::vec3 position, float radius, std::vector<ShapeVertex> &vertices, int latitudeBands, int longitudeBands, bool inverseNormal)
+{
+    std::vector<ShapeVertex> sphereVertices;
+
+    for (int latNumber = 0; latNumber <= latitudeBands; ++latNumber)
+    {
+        float theta = latNumber * glm::pi<float>() / latitudeBands;
+        float sinTheta = sin(theta);
+        float cosTheta = cos(theta);
+
+        for (int longNumber = 0; longNumber <= longitudeBands; ++longNumber)
+        {
+            float phi = longNumber * 2 * glm::pi<float>() / longitudeBands;
+            float sinPhi = sin(phi);
+            float cosPhi = cos(phi);
+
+            glm::vec3 normal = glm::vec3(cosPhi * sinTheta, cosTheta, sinPhi * sinTheta);
+            glm::vec3 vertexPosition = position + radius * normal;
+            glm::vec2 texCoords = glm::vec2(1.0f - (float)longNumber / longitudeBands, 1.0f - (float)latNumber / latitudeBands);
+
+            sphereVertices.push_back(ShapeVertex{vertexPosition, normal * (inverseNormal ? -1.f : 1.f), texCoords});
+        }
+    }
+
+    for (int latNumber = 0; latNumber < latitudeBands; ++latNumber)
+    {
+        for (int longNumber = 0; longNumber < longitudeBands; ++longNumber)
+        {
+            int first = (latNumber * (longitudeBands + 1)) + longNumber;
+            int second = first + longitudeBands + 1;
+
+            vertices.push_back(sphereVertices[first]);
+            vertices.push_back(sphereVertices[second]);
+            vertices.push_back(sphereVertices[first + 1]);
+
+            vertices.push_back(sphereVertices[second]);
+            vertices.push_back(sphereVertices[second + 1]);
+            vertices.push_back(sphereVertices[first + 1]);
+        }
+    }
+}

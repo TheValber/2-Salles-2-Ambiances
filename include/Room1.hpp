@@ -5,6 +5,7 @@
 
 #include "UniformLocations.hpp"
 #include "StreetLight.hpp"
+#include "Firefly.hpp"
 
 class Room1 : public Room
 {
@@ -21,12 +22,18 @@ public:
 
     void setLightOn(bool lightOn);
 
+    void animate();
+
 private:
     std::vector<glm::vec3> _lightsPositions;
     std::vector<glm::vec3> _lightsColors;
 
     StreetLight _streetLight;
     GLuint _streetLightTexture;
+
+    Firefly _firefly;
+    GLuint _fireflyTexture;
+    GLuint _fireflyTexture2;
 
     bool _isLightOn = true;
 };

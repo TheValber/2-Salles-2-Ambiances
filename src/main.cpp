@@ -25,6 +25,7 @@ double lastX = 0;
 double lastY = 0;
 
 bool isLightOn = true;
+bool isAnimated = true;
 
 static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/)
 {
@@ -48,6 +49,10 @@ static void key_callback(GLFWwindow *window, int key, int /*scancode*/, int acti
     else if (action == GLFW_PRESS && key == GLFW_KEY_E)
     {
         isLightOn = !isLightOn;
+    }
+    else if (action == GLFW_PRESS && key == GLFW_KEY_Q)
+    {
+        isAnimated = !isAnimated;
     }
 }
 
@@ -164,6 +169,11 @@ int main(int /*argc*/, char **argv)
 
         room1.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 1);
         room2.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 2);
+
+        if (isAnimated)
+        {
+            room1.animate();
+        }
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
