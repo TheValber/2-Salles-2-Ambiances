@@ -43,9 +43,18 @@ vec3 blinnPhongPos(vec3 lightPos, vec3 lightIntensity) {
     return attenuation * (uKd * lightIntensity * diffuse + uKs * lightIntensity * specular);
 }
 
+vec3 cellShading(vec3 color) {
+    float intensity = (color.r + color.g + color.b);
+    for (float i = 1.0; i > 0.1; i -= 0.1) {
+        if (intensity > i) {
+            return vec3(i, i, i);
+        }
+    }
+}
+
 void main()
 {
     vec4 color = texture(uTexture, vTexCoords);
-    vec3 light = uAmbientLight + blinnPhongDir() + blinnPhongPos(uLight2Pos_vs, uLight2Intensity);
+    vec3 light = uAmbientLight + blinnPhongDir() + cellShading(blinnPhongPos(uLight2Pos_vs, uLight2Intensity));
     fFragColor = vec4(color.rgb * light, color.a);
 }
