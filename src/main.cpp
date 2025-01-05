@@ -159,7 +159,7 @@ int main(int /*argc*/, char **argv)
         skyboxProgram.use();
         skybox.draw(ProjMatrix, cameraViewMatrix, skyboxUniformLocations);
 
-        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClearColor(1.f, 0.95f, 0.95f, 1.f);
 
         if (roomNb == 1)
         {
