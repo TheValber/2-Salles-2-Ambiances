@@ -27,3 +27,5 @@ glm::vec2 rotateTexCoords(const glm::vec2 &texCoords, float angle);
 void insertCubeVertices(glm::vec3 position, glm::vec3 scale, std::vector<ShapeVertex> &vertices);
 
 void insertSphereVertices(glm::vec3 position, float radius, std::vector<ShapeVertex> &vertices, int latitudeBands = 30, int longitudeBands = 30, bool inverseNormal = false);
+
+GLuint loadCubemap(std::vector<std::string> filesNames);

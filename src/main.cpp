@@ -13,6 +13,7 @@
 #include "../include/Room1.hpp"
 #include "../include/Room2.hpp"
 #include "../include/FPSCamera.hpp"
+#include "../include/Skybox.hpp"
 
 using namespace glimac;
 
@@ -104,14 +105,17 @@ int main(int /*argc*/, char **argv)
     Program program1 = loadProgram(applicationPath.dirPath() + "/shaders/room1.vs.glsl",
                                    applicationPath.dirPath() + "/shaders/room1.fs.glsl");
     program1.use();
-
     UniformLocations uniformLocations1(program1);
 
     Program program2 = loadProgram(applicationPath.dirPath() + "/shaders/room2.vs.glsl",
                                    applicationPath.dirPath() + "/shaders/room2.fs.glsl");
     program2.use();
-
     UniformLocations uniformLocations2(program2);
+
+    Program skyboxProgram = loadProgram(applicationPath.dirPath() + "/shaders/skybox.vs.glsl",
+                                        applicationPath.dirPath() + "/shaders/skybox.fs.glsl");
+    skyboxProgram.use();
+    UniformLocations skyboxUniformLocations(skyboxProgram);
 
     glfwSetKeyCallback(window, &key_callback);
     glfwSetWindowSizeCallback(window, &size_callback);
@@ -133,6 +137,8 @@ int main(int /*argc*/, char **argv)
         return -1;
     }
 
+    Skybox skybox = Skybox(applicationPath.dirPath());
+
     glm::mat4 defaultProjMatrix = glm::perspective(glm::radians(70.f), (float)window_width / window_height, 0.1f, 100.f);
     glm::mat4 defaultMVMatrix = glm::translate(glm::mat4(1), glm::vec3(0, 0, 0));
 
@@ -148,6 +154,12 @@ int main(int /*argc*/, char **argv)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         int roomNb = fpsCamera.getPosition().x < 0 ? 1 : 2;
+        skybox.setActualTexture(roomNb);
+
+        skyboxProgram.use();
+        skybox.draw(ProjMatrix, cameraViewMatrix, skyboxUniformLocations);
+
+        glClearColor(0.f, 0.f, 0.f, 1.f);
 
         if (roomNb == 1)
         {
@@ -156,7 +168,6 @@ int main(int /*argc*/, char **argv)
             program1.use();
             uniformLocations = uniformLocations1;
             room1.setLightOn(isLightOn);
-            glClearColor(0.f, 0.05f, 0.1f, 1.f);
         }
         else
         {
@@ -164,7 +175,6 @@ int main(int /*argc*/, char **argv)
             moveCamera(window, room2);
             program2.use();
             uniformLocations = uniformLocations2;
-            glClearColor(0.f, 0.5f, 1.f, 1.f);
         }
 
         room1.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 1);
@@ -185,6 +195,7 @@ int main(int /*argc*/, char **argv)
 
     room1.deleteRoom();
     room2.deleteRoom();
+    skybox.deleteDrawable();
 
     glfwTerminate();
     return 0;

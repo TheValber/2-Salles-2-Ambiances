@@ -40,10 +40,10 @@ Room1::Room1() : _streetLight(StreetLight(glm::vec3(-10.f, 0.f, 0.f), glm::vec3(
         glm::vec3(-10.f, 3.5f, 0.f),
         _firefly.getLightPosition()};
     _lightsColors = {
-        glm::vec3(0.9f, 0.7f, 0.5f),
-        glm::vec3(0.4f, 0.8f, 0.4f)};
+        glm::vec3(1.f, 0.7f, 0.5f),
+        glm::vec3(0.5f, 1.f, 0.5f)};
 
-    _ambientLight = glm::vec3(0.02f, 0.02f, 0.06f);
+    _ambientLight = glm::vec3(0.03f, 0.03f, 0.09f);
 
     _floorsKd = glm::vec3(0.5f, 0.5f, 0.5f);
     _floorsKs = glm::vec3(0.1f, 0.1f, 0.1f);
