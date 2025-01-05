@@ -8,6 +8,8 @@
 class Room
 {
 public:
+    virtual ~Room() = default;
+
     virtual bool initTextures(FilePath dirPath) = 0;
 
     virtual void draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations, bool renderLights) const = 0;

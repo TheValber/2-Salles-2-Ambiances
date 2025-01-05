@@ -13,6 +13,8 @@ using namespace glimac;
 class Drawable
 {
 public:
+    virtual ~Drawable() = default;
+
     virtual void initVBO() = 0;
 
     virtual void initVAO() = 0;
