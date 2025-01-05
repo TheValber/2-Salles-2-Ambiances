@@ -31,4 +31,7 @@ private:
     glm::vec3 _Kd;
     glm::vec3 _Ks;
     float _Shininess;
+
+    std::vector<glm::vec3> _minPoints;
+    std::vector<glm::vec3> _maxPoints;
 };

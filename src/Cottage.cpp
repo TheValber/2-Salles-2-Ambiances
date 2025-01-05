@@ -130,51 +130,84 @@ void Cottage::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, Unifo
 
 void Cottage::setMinPoint()
 {
-    glm::vec3 point(-0.1f, 0.0f, -0.1f);
-
+    glm::vec3 point(-2.f, 4.f, -4.f);
     point *= _scale;
-
     glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
     rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
     rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
     point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
-
     point += _position;
+    _minPoints.push_back(point);
 
-    _minPoint = point;
+    point = glm::vec3(-2.f, 0.f, -4.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _minPoints.push_back(point);
+
+    point = glm::vec3(-2.f, 0.f, 1.5f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _minPoints.push_back(point);
 }
 
 void Cottage::setMaxPoint()
 {
-    glm::vec3 point(0.1f, 4.f, 0.1f);
-
+    glm::vec3 point(10.f, 0.f, -4.f);
     point *= _scale;
-
     glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
     rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
     rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
     point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
-
     point += _position;
+    _maxPoints.push_back(point);
 
-    _maxPoint = point;
+    point = glm::vec3(-2.f, 4.f, -1.5f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _maxPoints.push_back(point);
+
+    point = glm::vec3(-2.f, 4.f, 4.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _maxPoints.push_back(point);
 }
 
 bool Cottage::isInside(glm::vec3 pos, float radius) const
 {
+    for (size_t i = 0; i < _minPoints.size(); i++)
+    {
+        glm::vec3 minPoint = _minPoints[i];
+        glm::vec3 maxPoint = _maxPoints[i];
+
+        if (pos.x + radius < minPoint.x || pos.x - radius > maxPoint.x)
+        {
+            continue;
+        }
+        if (pos.z + radius < minPoint.z || pos.z - radius > maxPoint.z)
+        {
+            continue;
+        }
+
+        return true;
+    }
+
     return false;
-
-    if (pos.x + radius < _minPoint.x || pos.x - radius > _maxPoint.x)
-    {
-        return false;
-    }
-
-    if (pos.z + radius < _minPoint.z || pos.z - radius > _maxPoint.z)
-    {
-        return false;
-    }
-
-    return true;
 }
 
 void Cottage::deleteDrawable()
