@@ -12,6 +12,13 @@ Cottage::Cottage(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
     _rotation = rotation;
     _scale = scale;
 
+    // Garage
+    insertCubeVertices(glm::vec3(7.f, 0.5f, -8.f), glm::vec3(6.f, 1.f, 0.1f), m_Vertices);
+    insertCubeVertices(glm::vec3(7.f, 2.75f, -8.f), glm::vec3(6.f, 0.5f, 0.1f), m_Vertices);
+    insertCubeVertices(glm::vec3(4.5f, 1.75f, -8.f), glm::vec3(1.f, 1.5f, 0.1f), m_Vertices);
+    insertCubeVertices(glm::vec3(9.5f, 1.75f, -8.f), glm::vec3(1.f, 1.5f, 0.1f), m_Vertices);
+    insertCubeVertices(glm::vec3(7.f, 3., -6.f), glm::vec3(6.f, 0.1f, 4.f), m_Vertices);
+
     // Murs
     insertCubeVertices(glm::vec3(4.f, 1.5f, 4.f), glm::vec3(12.f, 3.f, 0.1f), m_Vertices);
     insertCubeVertices(glm::vec3(4.f, 0.5f, -4.f), glm::vec3(12.f, 1.f, 0.1f), m_Vertices);
@@ -23,6 +30,9 @@ Cottage::Cottage(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
     insertCubeVertices(glm::vec3(-2.f, 1.5f, -2.5f), glm::vec3(0.1f, 3.f, 3.f), m_Vertices);
     insertCubeVertices(glm::vec3(-2.f, 1.5f, 2.5f), glm::vec3(0.1f, 3.f, 3.f), m_Vertices);
     insertCubeVertices(glm::vec3(-2.f, 2.875f, 0.f), glm::vec3(0.1f, 0.25f, 2.f), m_Vertices);
+
+    // Sol
+    insertCubeVertices(glm::vec3(4.f, 0.f, 0.f), glm::vec3(12.f, 0.1f, 8.f), m_Vertices);
 
     // Pignon
     m_Vertices.push_back(ShapeVertex{glm::vec3(-2.05f, 3.f, -4.f), glm::vec3(-1, 0, 0), glm::vec2(0, 0)});
@@ -156,6 +166,33 @@ void Cottage::setMinPoint()
     point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
     point += _position;
     _minPoints.push_back(point);
+
+    point = glm::vec3(4.f, 0.f, -8.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _minPoints.push_back(point);
+
+    point = glm::vec3(4.f, 0.f, 2.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _minPoints.push_back(point);
+
+    point = glm::vec3(7.f, 0.f, 2.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _minPoints.push_back(point);
 }
 
 void Cottage::setMaxPoint()
@@ -179,6 +216,33 @@ void Cottage::setMaxPoint()
     _maxPoints.push_back(point);
 
     point = glm::vec3(-2.f, 4.f, 4.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _maxPoints.push_back(point);
+
+    point = glm::vec3(10.f, 4.f, -8.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _maxPoints.push_back(point);
+
+    point = glm::vec3(4.f, 4.f, 4.f);
+    point *= _scale;
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+    point = glm::vec3(rotationMatrix * glm::vec4(point, 1.0f));
+    point += _position;
+    _maxPoints.push_back(point);
+
+    point = glm::vec3(7.f, 4.f, 4.f);
     point *= _scale;
     rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(_rotation.x), glm::vec3(1, 0, 0));
     rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), glm::vec3(0, 1, 0));

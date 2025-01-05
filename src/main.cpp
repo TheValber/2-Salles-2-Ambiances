@@ -170,6 +170,8 @@ int main(int /*argc*/, char **argv)
         room1.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 1);
         room2.draw(ProjMatrix, MVMatrix, uniformLocations, roomNb == 2);
 
+        room2.drawGlass(ProjMatrix, MVMatrix, uniformLocations);
+
         if (isAnimated)
         {
             room1.animate();

@@ -4,9 +4,10 @@
 
 #include <glimac/Image.hpp>
 
-Room2::Room2() : _rock1(Rock(glm::vec3(15.f, 0.f, -6.f), glm::vec3(20.f, 0.f, 10.f), glm::vec3(1.5f, 0.8f, 2.f))),
-                 _rock2(Rock(glm::vec3(12.5f, 0.f, -7.5f), glm::vec3(10.f, 0.f, 20.f), glm::vec3(2.2f, 1.2f, 1.7f))),
-                 _cottage(Cottage(glm::vec3(11.f, 0.f, 8.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)))
+Room2::Room2() : _rock1(Rock(glm::vec3(13.f, 0.f, -6.f), glm::vec3(20.f, 0.f, 10.f), glm::vec3(1.5f, 0.8f, 2.f))),
+                 _rock2(Rock(glm::vec3(10.5f, 0.f, -7.5f), glm::vec3(10.f, 0.f, 20.f), glm::vec3(2.2f, 1.2f, 1.7f))),
+                 _cottage(Cottage(glm::vec3(11.f, 0.f, 8.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f))),
+                 _glass(Glass(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)))
 {
     _floors.push_back(DrawableSquare(glm::vec3(0.5f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 4.f)));
     _floors.push_back(DrawableSquare(glm::vec3(11.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(20.f, 1.f, 24.f)));
@@ -40,8 +41,14 @@ Room2::Room2() : _rock1(Rock(glm::vec3(15.f, 0.f, -6.f), glm::vec3(20.f, 0.f, 10
     _cottage.initVBO();
     _cottage.initVAO();
 
+    _glass.initVBO();
+    _glass.initVAO();
+
     _lightDirection = glm::vec3(-1.f, 1.f, -1.f);
-    _lightColor = glm::vec3(1.f, 1.f, 1.f);
+    _lightColor = glm::vec3(0.9f, 0.9f, 0.9f);
+
+    _pointLightPosition = glm::vec3(15.f, 3.f, 8.f);
+    _pointLightColor = glm::vec3(1.0f, 0.8f, 0.3f);
 
     _ambientLight = glm::vec3(0.2f, 0.2f, 0.2f);
 
@@ -119,6 +126,20 @@ bool Room2::initTextures(FilePath dirPath)
 
     _cottage.setTexture(_cottageTexture);
 
+    auto glassImage = loadImage(dirPath + "/assets/textures/glass.png");
+    if (glassImage == nullptr)
+    {
+        return false;
+    }
+    glGenTextures(1, &_glassTexture);
+    glBindTexture(GL_TEXTURE_2D, _glassTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, glassImage->getWidth(), glassImage->getHeight(), 0, GL_RGBA, GL_FLOAT, glassImage->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    _glass.setTexture(_glassTexture);
+
     return true;
 }
 
@@ -129,6 +150,10 @@ void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, Uniform
         glm::vec3 lightDir = glm::vec3(MVMatrix * glm::vec4(_lightDirection, 0.0));
         glUniform3f(uniformLocations.uLightDir_vsLocation, lightDir.x, lightDir.y, lightDir.z);
         glUniform3f(uniformLocations.uLightIntensityLocation, _lightColor.x, _lightColor.y, _lightColor.z);
+
+        glm::vec3 lightPos2 = glm::vec3(MVMatrix * glm::vec4(_pointLightPosition, 1.0));
+        glUniform3f(uniformLocations.uLight2Pos_vsLocation, lightPos2.x, lightPos2.y, lightPos2.z);
+        glUniform3f(uniformLocations.uLight2IntensityLocation, _pointLightColor.x, _pointLightColor.y, _pointLightColor.z);
 
         glUniform3f(uniformLocations.uAmbientLightLocation, _ambientLight.x, _ambientLight.y, _ambientLight.z);
     }
@@ -155,6 +180,11 @@ void Room2::draw(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, Uniform
     _rock2.draw(ProjMatrix, MVMatrix, uniformLocations);
 
     _cottage.draw(ProjMatrix, MVMatrix, uniformLocations);
+}
+
+void Room2::drawGlass(const glm::mat4 &ProjMatrix, const glm::mat4 &MVMatrix, UniformLocations uniformLocations) const
+{
+    _glass.draw(ProjMatrix, MVMatrix, uniformLocations);
 }
 
 bool Room2::isInWall(glm::vec3 pos, float radius) const
@@ -195,11 +225,13 @@ void Room2::deleteRoom()
     _rock1.deleteDrawable();
     _rock2.deleteDrawable();
     _cottage.deleteDrawable();
+    _glass.deleteDrawable();
 
     glDeleteTextures(1, &_floorTexture);
     glDeleteTextures(1, &_wallTexture);
     glDeleteTextures(1, &_rockTexture);
     glDeleteTextures(1, &_cottageTexture);
+    glDeleteTextures(1, &_glassTexture);
 
     _floors.clear();
     _walls.clear();
