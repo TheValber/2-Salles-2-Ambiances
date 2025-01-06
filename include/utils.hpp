@@ -6,6 +6,7 @@
 #include <glad/glad.h>
 #include <glimac/glm.hpp>
 #include <glimac/common.hpp>
+#include <vector>
 
 using namespace glimac;
 

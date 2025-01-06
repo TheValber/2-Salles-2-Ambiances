@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../include/vertexAttr.hpp"
 #include "../include/utils.hpp"
+#include <algorithm>
 
 Rock::Rock(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
